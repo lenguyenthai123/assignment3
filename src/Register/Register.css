@@ -1,0 +1,85 @@
+/* register.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.register-container {
+  @apply min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600;
+}
+
+.background-animation {
+  @apply absolute inset-0;
+  background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fad0c4, #ff9a9e);
+  background-size: 400% 400%;
+  animation: gradientAnimation 15s ease infinite;
+  z-index: -1;
+}
+.particles-bg {
+  @apply absolute inset-0;
+  z-index: -1;
+}
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.register-card {
+  @apply bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md;
+  /* Thêm hiệu ứng chuyển động nhẹ khi di chuột */
+  transition: transform 0.3s;
+}
+
+.register-card:hover {
+  transform: translateY(-10px);
+}
+
+.register-title {
+  @apply text-3xl font-bold mb-6 text-center text-gray-800;
+}
+
+.register-field {
+  @apply mb-5;
+}
+
+.register-field label {
+  @apply block text-gray-700 font-medium mb-2;
+}
+
+.register-input {
+  @apply mt-1 block w-full border border-gray-300 rounded-full shadow-sm py-2 px-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent;
+}
+
+.register-error {
+  @apply text-red-500 text-sm mt-1;
+}
+
+.register-button {
+  @apply w-full bg-indigo-500 text-white py-2 px-4 rounded-full hover:bg-indigo-600 transition duration-200;
+}
+
+/* Thêm hiệu ứng cho nút khi di chuột */
+.register-button:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.register-footer {
+  @apply mt-6 flex flex-col items-center;
+}
+
+.register-text {
+  @apply text-gray-700 mb-2;
+}
+
+.login-link {
+  @apply w-full;
+}
+
+.login-button {
+  @apply w-full bg-green-500 text-white py-2 px-4 rounded-full hover:bg-green-600 transition duration-200;
+}

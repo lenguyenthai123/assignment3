@@ -1,0 +1,63 @@
+.my-masonry-grid {
+  display: flex;
+  margin-left: -15px; /* gutter size offset */
+  width: auto;
+}
+
+.my-masonry-grid_column {
+  padding-left: 15px; /* gutter size */
+  background-clip: padding-box;
+}
+
+.photo-item {
+  margin-bottom: 15px; /* Add margin between items */
+  position: relative;
+}
+
+.photo-img {
+  width: 100%;
+  height: auto;
+  border-radius: 0.5rem; /* rounded-lg */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* shadow-md */
+  margin-bottom: 15px;
+}
+
+.photo-author {
+  display: flex;
+  align-items: center; /* Center items vertically */
+  padding: 0.5rem; /* p-2 */
+  position: absolute;
+  bottom: 0;
+  left: -100%; /* Ensure the left position is 0 */
+  width: 200%; /* Ensure the width is the same as the parent */
+  background-color: rgba(0, 0, 0, 0.5); /* bg-black bg-opacity-50 */
+  color: white;
+  opacity: 0;
+  transition: opacity 0.3s ease, color 0.3s ease; /* transition-opacity duration-300 */
+  font-size: 1rem; /* Ensure the text is readable */
+  margin: 0px;
+}
+
+.photo-item:hover .photo-author {
+  opacity: 1; /* group-hover:opacity-100 */
+}
+
+.photo-item:hover .author-text {
+  color: white; /* Change text color to white on hover */
+}
+
+.author-img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%; /* Make the image circular */
+  margin-right: 0.5rem; /* Space between image and text */
+}
+
+.author-text {
+  display: flex;
+  margin: 0px;
+  align-items: center; /* Center items vertically */
+  justify-content: center; /* Center items horizontally */
+
+  font-size: 1rem; /* Ensure the text is readable */
+}

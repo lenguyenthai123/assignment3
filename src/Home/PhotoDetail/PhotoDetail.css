@@ -1,0 +1,147 @@
+.photo-detail {
+  text-align: center;
+  padding: 20px;
+  padding: 1rem;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 20px;
+  text-decoration: none;
+  color: #3498db;
+  font-size: 16px;
+
+  display: block;
+  margin-bottom: 1rem;
+  color: #3b82f6; /* text-blue-500 */
+  text-decoration: underline;
+}
+
+.photo-detail-content {
+  max-width: 800px;
+  margin: 0 auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #fff;
+  padding: 20px;
+}
+
+.photo-detail-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin-bottom: 20px;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.photo-title {
+  font-size: 20px; /* text-2xl */
+  font-weight: bold; /* font-bold */
+  margin-bottom: 0.5rem;
+}
+h2 {
+  margin-bottom: 10px;
+  font-size: 24px;
+  color: #333;
+}
+
+p {
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #555;
+}
+.photo-description {
+  color: #718096; /* text-gray-600 */
+  margin-bottom: 1rem;
+}
+.photo-author {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0rem;
+}
+
+.author-img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%; /* Make the image circular */
+  margin-right: 0.5rem; /* Space between image and text */
+}
+
+.author-text {
+  display: flex;
+  margin: 0px;
+  align-items: center; /* Center items vertically */
+  justify-content: center; /* Center items horizontally */
+
+  font-size: 1rem; /* Ensure the text is readable */
+}
+
+.photo-author1 {
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Center items vertically */
+  padding: 0.5rem; /* p-2 */
+  height: auto;
+  width: auto; /* Ensure the width is the same as the parent */
+  color: black;
+  font-size: 1rem; /* Ensure the text is readable */
+}
+
+.author-img1 {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%; /* Make the image circular */
+  margin-right: 0.5rem; /* Space between image and text */
+}
+
+.author-text1 {
+  display: flex;
+  margin: 0px;
+  align-items: center; /* Center items vertically */
+  justify-content: center; /* Center items horizontally */
+
+  font-size: 1rem; /* Ensure the text is readable */
+}
+
+.no-more {
+  text-align: center;
+  margin-top: 1rem; /* my-4 */
+  color: #6b7280; /* text-gray-500 */
+}
+
+.loading-container {
+  position: fixed;
+  bottom: 45%; /* bottom-10 */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.loading-spinner {
+  border-width: 8px; /* border-8 */
+  border-style: solid; /* border-solid */
+  border-color: #e5e7eb; /* border-gray-200 */
+  border-top-color: #3b82f6; /* border-t-blue-500 */
+  border-radius: 9999px; /* rounded-full */
+  width: 4rem; /* w-16 */
+  height: 4rem; /* h-16 */
+  margin-bottom: 0.5rem; /* mb-2 */
+  animation: spin 1s linear infinite;
+}
+
+.loading-text {
+  text-align: center;
+  color: #374151; /* text-gray-700 */
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
