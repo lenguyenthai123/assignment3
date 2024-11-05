@@ -17,7 +17,6 @@ function Login() {
   } = useForm();
 
   const onSubmit = (data) => {
-    Cookies.set("accessToken", "123456");
     axios
       .post(`${backendUrl}/user/login`, data)
       .then((response) => {
