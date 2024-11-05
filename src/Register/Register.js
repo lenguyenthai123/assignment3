@@ -9,6 +9,8 @@ import axios from "axios"; // Thêm import axios
 import Particles from "react-tsparticles";
 
 function Register() {
+  const backendUrl = process.env.REACT_APP_BACKEND_URL; // Sử dụng biến môi trường cho URL của backend
+
   const navigate = useNavigate(); // Khởi tạo hook điều hướng
   const {
     register,
@@ -27,13 +29,16 @@ function Register() {
       return;
     }
     axios
-      .post("/user/register", data)
+      .post(`${backendUrl}/user/register`, data)
       .then((response) => {
-        if (response.ok === 200) {
+        console.error(response);
+
+        if (response.data.statusCode === "SUCCESS") {
           alert("Đăng ký thành công");
+          console.log(response);
           navigate("/login"); // Chuyển hướng đến trang đăng nhập
         } else {
-          alert(`Lỗi: ${response.data.errMessage}`);
+          alert(`Lỗi: ${response.data.message}`);
         }
       })
       .catch((error) => {
@@ -42,6 +47,9 @@ function Register() {
         } else {
           alert(`Lỗi: ${error.message}`);
         }
+      })
+      .finally(() => {
+        // Thêm vào finally để ẩn loading
       });
   };
 

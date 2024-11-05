@@ -7,6 +7,8 @@ import "./Login.css";
 import Cookies from "js-cookie"; // Thêm import này
 
 function Login() {
+  const backendUrl = process.env.REACT_APP_BACKEND_URL; // Sử dụng biến môi trường cho URL của backend
+
   const navigate = useNavigate();
   const {
     register,
@@ -17,15 +19,15 @@ function Login() {
   const onSubmit = (data) => {
     Cookies.set("accessToken", "123456");
     axios
-      .post("/user/login", data)
+      .post(`${backendUrl}/user/login`, data)
       .then((response) => {
         const result = response.data;
-        if (result.statusCode === 200) {
-          Cookies.set("accessToken", result.accessToken, { expires: 7 }); // Lưu accessToken trong cookie
+        if (response.data.statusCode === "SUCCESS") {
+          Cookies.set("accessToken", result.data, { expires: 7 }); // Lưu accessToken trong cookie
           alert("Đăng nhập thành công");
           navigate("/home"); // Chuyển hướng đến trang chủ hoặc trang mong muốn
         } else {
-          alert(`Lỗi: ${result.errMessage}`);
+          alert(`Lỗi: ${result.message}`);
         }
       })
       .catch((error) => {

@@ -20,6 +20,32 @@ function Home() {
 
   // API Key của Unsplash, thay bằng giá trị thực của bạn
   const accessKey = process.env.REACT_APP_UNSPLASH_ACCESS_KEY;
+  const backendUrl = process.env.REACT_APP_BACKEND_URL; // Sử dụng biến môi trường cho URL của backend
+
+  // Kiểm tra token khi component được mount lần đầu tiên
+  useEffect(() => {
+    const accessToken = Cookies.get("accessToken");
+    if (!accessToken) {
+      navigate("/login");
+    } else {
+      axios
+        .get(`${backendUrl}/home`, {
+          headers: { Authorization: `${accessToken}` },
+        })
+        .then((response) => {
+          if (response.status !== 200) {
+            navigate("/login");
+          }
+        })
+        .catch((error) => {
+          if (error.response && error.response.status === 401) {
+            navigate("/login");
+          } else {
+            console.error("Error verifying token:", error);
+          }
+        });
+    }
+  }, [navigate]);
 
   // Hàm fetch ảnh từ API Unsplash, sử dụng useCallback để tránh tạo lại hàm khi không cần thiết
   const fetchPhotos = useCallback(async () => {
