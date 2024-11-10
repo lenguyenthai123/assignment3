@@ -1,61 +1,75 @@
-// Register.js
-import React from "react";
-// Thêm vào phần import
-import { useForm, useWatch } from "react-hook-form"; // Thay thế watch bằng useWatch
-import { useNavigate, Link } from "react-router-dom"; // Thêm import này
+// src/Register/Register.js
+import React, { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
 import "./Register.css";
-import axios from "axios"; // Thêm import axios
-
-import Particles from "react-tsparticles";
+import Notification from "../Notification/Notification"; // Import component thông báo
 
 function Register() {
   const backendUrl = process.env.REACT_APP_BACKEND_URL; // Sử dụng biến môi trường cho URL của backend
 
-  const navigate = useNavigate(); // Khởi tạo hook điều hướng
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
-    control,
     formState: { errors },
   } = useForm();
-  const password = useWatch({
-    control,
-    name: "password",
-  });
+  const [loading, setLoading] = useState(false); // Trạng thái loading
+  const [notification, setNotification] = useState(null); // Trạng thái thông báo
+
   const onSubmit = (data) => {
-    // Thêm vào hàm onSubmit
-    if (data.password !== data.confirmPassword) {
-      alert("Mật khẩu và xác nhận mật khẩu không khớp");
-      return;
-    }
+    setLoading(true); // Bắt đầu loading
     axios
       .post(`${backendUrl}/user/register`, data)
       .then((response) => {
-        console.error(response);
-
         if (response.data.statusCode === "SUCCESS") {
-          alert("Đăng ký thành công");
-          console.log(response);
+          setNotification({ message: "Đăng ký thành công", type: "success" });
           navigate("/login"); // Chuyển hướng đến trang đăng nhập
         } else {
-          alert(`Lỗi: ${response.data.message}`);
+          setNotification({
+            message: `Lỗi: ${response.data.message}`,
+            type: "error",
+          });
         }
       })
       .catch((error) => {
-        if (error.response) {
-          alert(`Lỗi: ${error.response.data.errMessage}`);
+        if (error.response && error.response.data.message) {
+          setNotification({
+            message: `${error.response.data.message}`,
+            type: "error",
+          });
         } else {
-          alert(`Lỗi: ${error.message}`);
+          setNotification({ message: `Lỗi: ${error.message}`, type: "error" });
         }
       })
       .finally(() => {
-        // Thêm vào finally để ẩn loading
+        setLoading(false); // Kết thúc loading
       });
   };
 
+  const handleCloseNotification = () => {
+    setNotification(null);
+  };
+
+  useEffect(() => {
+    if (notification) {
+      const timer = setTimeout(() => {
+        setNotification(null);
+      }, 5000); // Thông báo tự động đóng sau 5 giây
+      return () => clearTimeout(timer);
+    }
+  }, [notification]);
+
   return (
     <div className="register-container">
-      <Particles className="particles-bg" /* ...Cấu hình Particles nếu có */ />
+      {notification && (
+        <Notification
+          message={notification.message}
+          type={notification.type}
+          onClose={handleCloseNotification}
+        />
+      )}
       <div className="register-card">
         <h2 className="register-title">Đăng Ký</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -78,6 +92,8 @@ function Register() {
               <p className="register-error">{errors.email.message}</p>
             )}
           </div>
+
+          {/* Thêm các trường đăng ký khác tương tự */}
           <div className="register-field">
             <label>Mật khẩu</label>
             <input
@@ -97,32 +113,17 @@ function Register() {
               <p className="register-error">{errors.password.message}</p>
             )}
           </div>
-          <div className="register-field">
-            <label>Xác nhận mật khẩu</label>
-            <input
-              type="password"
-              className={`register-input ${
-                errors.confirmPassword ? "border-red-500" : ""
-              }`}
-              {...register("confirmPassword", {
-                required: "Xác nhận mật khẩu là bắt buộc",
-                validate: (value) =>
-                  value === password || "Mật khẩu không khớp",
-              })}
-            />
-            {errors.confirmPassword && (
-              <p className="register-error">{errors.confirmPassword.message}</p>
-            )}
-          </div>{" "}
-          <button type="submit" className="register-button">
-            Đăng Ký
+
+          <button type="submit" className="register-button" disabled={loading}>
+            {loading ? <div className="spinner-register"></div> : "Đăng Ký"}
           </button>
         </form>
 
         <div className="register-footer">
-          <p className="register-text">Đã có tài khoản?</p>
+          <p className="register-text">Đã có tài khoản?&nbsp; </p>
+
           <Link to="/login" className="login-link">
-            <button className="login-button">Đăng Nhập Ngay</button>
+            <button className="login-button"> Đăng Nhập Ngay</button>
           </Link>
         </div>
       </div>

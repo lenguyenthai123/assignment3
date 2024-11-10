@@ -62,6 +62,9 @@
 
 .register-button {
   @apply w-full bg-indigo-500 text-white py-2 px-4 rounded-full hover:bg-indigo-600 transition duration-200;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Thêm hiệu ứng cho nút khi di chuột */
@@ -82,4 +85,39 @@
 
 .login-button {
   @apply w-full bg-green-500 text-white py-2 px-4 rounded-full hover:bg-green-600 transition duration-200;
+}
+
+
+.spinner-register {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #ffffff; /* Màu trắng */
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+/* CSS cho component Notification */
+.notification {
+  @apply fixed top-4 right-4 border rounded-lg shadow-lg p-4 flex items-center justify-between max-w-xs w-full z-50;
+}
+
+.notification.success {
+  @apply bg-green-100 border-green-500 text-green-700;
+}
+
+.notification.error {
+  @apply bg-red-100 border-red-500 text-red-700;
+}
+
+.close-button {
+  @apply ml-4 text-gray-500 hover:text-gray-700;
 }
