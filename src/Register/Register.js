@@ -1,65 +1,62 @@
-// src/Register/Register.js
-import React, { useState, useEffect } from "react";
+// src/Register.js
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
-import "./Register.css";
-import Notification from "../Notification/Notification"; // Import component thông báo
+import axios from "axios"; // Sử dụng axios bình thường
+import { useNavigate } from "react-router-dom";
+import Notification from "../Notification/Notification";
+import "./Register.css"; // Import file CSS riêng
 
-function Register() {
-  const backendUrl = process.env.REACT_APP_BACKEND_URL; // Sử dụng biến môi trường cho URL của backend
-
-  const navigate = useNavigate();
+const Register = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const [loading, setLoading] = useState(false); // Trạng thái loading
-  const [notification, setNotification] = useState(null); // Trạng thái thông báo
+  const [notification, setNotification] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const onSubmit = (data) => {
-    setLoading(true); // Bắt đầu loading
-    axios
-      .post(`${backendUrl}/user/register`, data)
-      .then((response) => {
-        if (response.data.statusCode === "SUCCESS") {
-          setNotification({ message: "Đăng ký thành công", type: "success" });
-          navigate("/login"); // Chuyển hướng đến trang đăng nhập
-        } else {
-          setNotification({
-            message: `Lỗi: ${response.data.message}`,
-            type: "error",
-          });
+  const onSubmit = async (data) => {
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/user/register`,
+        {
+          username: data.username,
+          email: data.email,
+          password: data.password,
         }
-      })
-      .catch((error) => {
-        if (error.response && error.response.data.message) {
-          setNotification({
-            message: `${error.response.data.message}`,
-            type: "error",
-          });
-        } else {
-          setNotification({ message: `Lỗi: ${error.message}`, type: "error" });
-        }
-      })
-      .finally(() => {
-        setLoading(false); // Kết thúc loading
+      );
+
+      if (response.data.statusCode === "SUCCESS") {
+        setNotification({
+          message: "Đăng ký thành công! Vui lòng đăng nhập.",
+          type: "success",
+        });
+        // Chuyển hướng sau khi đăng ký thành công
+        setTimeout(() => {
+          navigate("/login");
+        }, 1000);
+      } else {
+        setNotification({
+          message: `Lỗi: ${response.data.message}`,
+          type: "error",
+        });
+      }
+    } catch (error) {
+      console.error("Error during registration:", error);
+      setNotification({
+        message: `Lỗi: ${error.response.data.message}`,
+        type: "error",
       });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleCloseNotification = () => {
     setNotification(null);
   };
-
-  useEffect(() => {
-    if (notification) {
-      const timer = setTimeout(() => {
-        setNotification(null);
-      }, 5000); // Thông báo tự động đóng sau 5 giây
-      return () => clearTimeout(timer);
-    }
-  }, [notification]);
 
   return (
     <div className="register-container">
@@ -73,6 +70,32 @@ function Register() {
       <div className="register-card">
         <h2 className="register-title">Đăng Ký</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
+          {/* Username Field */}
+          <div className="register-field">
+            <label>Username</label>
+            <input
+              type="text"
+              className={`register-input ${
+                errors.username ? "border-red-500" : ""
+              }`}
+              {...register("username", {
+                required: "Username là bắt buộc",
+                minLength: {
+                  value: 3,
+                  message: "Username phải có ít nhất 3 ký tự",
+                },
+                pattern: {
+                  value: /^[a-zA-Z0-9_]+$/,
+                  message: "Username chỉ chứa chữ cái, số và dấu gạch dưới",
+                },
+              })}
+            />
+            {errors.username && (
+              <p className="register-error">{errors.username.message}</p>
+            )}
+          </div>
+
+          {/* Email Field */}
           <div className="register-field">
             <label>Email</label>
             <input
@@ -93,7 +116,7 @@ function Register() {
             )}
           </div>
 
-          {/* Thêm các trường đăng ký khác tương tự */}
+          {/* Password Field */}
           <div className="register-field">
             <label>Mật khẩu</label>
             <input
@@ -114,21 +137,27 @@ function Register() {
             )}
           </div>
 
+          {/* Submit Button */}
           <button type="submit" className="register-button" disabled={loading}>
             {loading ? <div className="spinner-register"></div> : "Đăng Ký"}
           </button>
         </form>
 
+        {/* Đường dẫn đăng nhập nếu đã có tài khoản */}
         <div className="register-footer">
-          <p className="register-text">Đã có tài khoản?&nbsp; </p>
-
-          <Link to="/login" className="login-link">
-            <button className="login-button"> Đăng Nhập Ngay</button>
-          </Link>
+          <p className="register-text">
+            Đã có tài khoản?&nbsp;
+            <button
+              className="register-login-link"
+              onClick={() => navigate("/login")}
+            >
+              Đăng Nhập
+            </button>
+          </p>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default Register;

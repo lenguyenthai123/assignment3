@@ -1,9 +1,10 @@
 // Login.js
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import "./Login.css";
+import { AuthContext } from "../Context/AuthContext";
 import Cookies from "js-cookie"; // Thêm import này
 import Notification from "../Notification/Notification"; // Import component thông báo
 
@@ -16,6 +17,7 @@ function Login() {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const { login } = useContext(AuthContext);
   const [loading, setLoading] = useState(false); // Thêm trạng thái loading
   const [notification, setNotification] = useState(null); // Thêm trạng thái thông báo
 
@@ -26,9 +28,9 @@ function Login() {
       .then((response) => {
         const result = response.data;
         if (response.data.statusCode === "SUCCESS") {
-          Cookies.set("accessToken", result.data, { expires: 7 }); // Lưu accessToken trong cookie
+          login(result.data.token, result.data.user);
           setNotification({ message: "Đăng nhập thành công", type: "success" });
-          navigate("/home"); // Chuyển hướng đến trang chủ hoặc trang mong muốn
+          navigate("/profile"); // Chuyển hướng đến trang chủ hoặc trang mong muốn
         } else {
           console.log(result);
           setNotification({ message: `Lỗi: ${result.message}`, type: "error" });
@@ -36,8 +38,11 @@ function Login() {
       })
       .catch((error) => {
         console.log(error);
+        const message = error.response
+          ? error.response.data.message
+          : error.message;
         setNotification({
-          message: ` ${error.response.data.message}`,
+          message: ` ${message}`,
           type: "error",
         });
       })
@@ -105,12 +110,17 @@ function Login() {
           </button>
         </form>
 
+        {/* Đường dẫn đăng nhập nếu đã có tài khoản */}
         <div className="login-footer">
-          <p className="login-text">Chưa có tài khoản?&nbsp; </p>
-
-          <Link to="/register" className="register-link">
-            <button className="register-button"> Đăng Ký Ngay</button>
-          </Link>
+          <p className="login-text">
+            Chưa có tài khoản?&nbsp;
+            <button
+              className="register-login-link"
+              onClick={() => navigate("/register")}
+            >
+              Đăng Ký
+            </button>
+          </p>
         </div>
       </div>
     </div>

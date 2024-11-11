@@ -1,0 +1,22 @@
+/* src/Notification/Notification.css */
+
+.notification {
+  @apply fixed top-4 right-4 border rounded-lg shadow-lg p-4 flex items-center justify-between max-w-xs w-full z-50 transition-opacity duration-500;
+  opacity: 1;
+}
+
+.notification.success {
+  @apply bg-green-100 border-green-500 text-green-700;
+}
+
+.notification.error {
+  @apply bg-red-100 border-red-500 text-red-700;
+}
+
+.notification.fade-out {
+  @apply opacity-0;
+}
+
+.close-button {
+  @apply ml-4 text-gray-500 hover:text-gray-700 focus:outline-none;
+}

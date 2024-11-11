@@ -9,11 +9,14 @@
 
 .login-card {
   @apply bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md;
-  transition: transform 0.3s;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .login-card:hover {
-  transform: translateY(-10px);
+  /* Removed transform: translateY(-10px); */
+  /* Added scale and enhanced shadow for a modern effect */
+  transform: scale(1.02);
+  box-shadow: 0 12px 30px rgba(31, 38, 135, 0.4);
 }
 
 .login-title {
@@ -37,7 +40,7 @@
 }
 
 .login-button {
-  @apply w-full bg-green-500 text-white py-2 px-4 rounded-full hover:bg-indigo-600 transition duration-200;
+  @apply w-full bg-green-500 text-white py-2 px-4 rounded-full hover:bg-green-600 transition duration-200;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -76,6 +79,7 @@
     transform: rotate(360deg);
   }
 }
+
 /* CSS cho component Notification */
 .notification {
   @apply fixed top-4 right-4 border rounded-lg shadow-lg p-4 flex items-center justify-between max-w-xs w-full z-50;
@@ -91,4 +95,15 @@
 
 .close-button {
   @apply ml-4 text-gray-500 hover:text-gray-700;
+}
+
+.register-login-link {
+  background: none;
+  border: none;
+  color: #2563eb;
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: underline;
+  padding: 0;
+  transition: color 0.3s ease;
 }
