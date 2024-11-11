@@ -22,10 +22,17 @@ function App() {
       <div className="App">
         <Routes>
           {/* Điều hướng từ trang chủ "/" đến "/home" */}
-          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/" element={<Navigate to="/home" />} />
           <Route path="/login" element={<Login />} />
           {/* Đường dẫn cho trang register */}
           <Route path="/register" element={<Register />} />
+          {/* Đường dẫn cho trang home */}
+          <Route path="/home/*" element={<Home />} />
+          {/* Đường dẫn cho trang danh sách ảnh */}
+          <Route path="/home/photos" element={<MasonryGrid />} />
+          {/* Đường dẫn cho trang chi tiết ảnh */}
+          <Route path="/home/photos/:slugId" element={<PhotoDetail />} />
+          {/* Đường dẫn cho trang login */}
           {/* Đường dẫn cho trang profile được bảo vệ */}
           <Route
             path="/profile"
@@ -41,11 +48,3 @@ function App() {
   );
 }
 export default App;
-
-// {/* Đường dẫn cho trang home */}
-// <Route path="/home/*" element={<Home />} />
-// {/* Đường dẫn cho trang danh sách ảnh */}
-// <Route path="/home/photos" element={<MasonryGrid />} />
-// {/* Đường dẫn cho trang chi tiết ảnh */}
-// <Route path="/home/photos/:slugId" element={<PhotoDetail />} />
-// {/* Đường dẫn cho trang login */}

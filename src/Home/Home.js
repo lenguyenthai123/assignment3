@@ -1,14 +1,16 @@
-// Home.js
-import React, { useState, useEffect, useCallback } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+// src/Home.js
+import React, { useState, useEffect, useCallback, useContext } from "react";
+import { Routes, Route, useNavigate, Link } from "react-router-dom";
 import Cookies from "js-cookie";
 import axios from "axios";
 import MasonryGrid from "./PhotoList/PhotoList";
 import PhotoDetail from "./PhotoDetail/PhotoDetail";
 import "./Home.css";
+import { AuthContext } from "../Context/AuthContext"; // Import AuthContext
 
 function Home() {
   const navigate = useNavigate();
+  const { token, user, logout } = useContext(AuthContext); // Lấy token và logout từ AuthContext
 
   // Quản lý trạng thái cho các ảnh, trang hiện tại, và trạng thái tải dữ liệu
   const [photos, setPhotos] = useState([]);
@@ -21,31 +23,6 @@ function Home() {
   // API Key của Unsplash, thay bằng giá trị thực của bạn
   const accessKey = process.env.REACT_APP_UNSPLASH_ACCESS_KEY;
   const backendUrl = process.env.REACT_APP_BACKEND_URL; // Sử dụng biến môi trường cho URL của backend
-
-  // Kiểm tra token khi component được mount lần đầu tiên
-  useEffect(() => {
-    const accessToken = Cookies.get("accessToken");
-    if (!accessToken) {
-      navigate("/login");
-    } else {
-      axios
-        .get(`${backendUrl}/home`, {
-          headers: { Authorization: `${accessToken}` },
-        })
-        .then((response) => {
-          if (response.status !== 200) {
-            navigate("/login");
-          }
-        })
-        .catch((error) => {
-          if (error.response && error.response.status === 401) {
-            navigate("/login");
-          } else {
-            console.error("Error verifying token:", error);
-          }
-        });
-    }
-  }, [navigate]);
 
   // Hàm fetch ảnh từ API Unsplash, sử dụng useCallback để tránh tạo lại hàm khi không cần thiết
   const fetchPhotos = useCallback(async () => {
@@ -112,33 +89,75 @@ function Home() {
     return () => window.removeEventListener("scroll", debounceScroll); // Xóa sự kiện khi component bị unmount
   }, [fetchPhotos, loading, hasMore]);
 
-  // Kiểm tra token khi component được mount lần đầu tiên
-  useEffect(() => {
-    const accessToken = Cookies.get("accessToken");
-    if (!accessToken) {
-      navigate("/login");
-    } else {
-      axios
-        .get("/user/auth/token", {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        })
-        .then((response) => {
-          if (response.status !== 200) {
-            navigate("/login");
-          }
-        })
-        .catch((error) => {
-          if (error.response && error.response.status === 401) {
-            navigate("/login");
-          } else {
-            console.error("Error verifying token:", error);
-          }
-        });
-    }
-  }, [navigate]);
+  // Hàm debounce để giới hạn số lần gọi hàm scroll
+  function debounce(func, wait) {
+    let timeout;
+    return function (...args) {
+      // Xóa timeout trước đó
+      clearTimeout(timeout);
+      // Đặt timeout mới
+      timeout = setTimeout(() => func.apply(this, args), wait);
+    };
+  }
+
+  // Hàm xử lý đăng xuất và điều hướng đến trang đăng nhập
+  const handleLogout = () => {
+    logout();
+    navigate("/home");
+  };
+
+  // Hàm xử lý điều hướng đến trang Profile
+  const handleGoProfile = () => {
+    navigate("/profile");
+  };
+
+  // Hàm xử lý điều hướng đến trang Login
+  const handleGoLogin = () => {
+    navigate("/login");
+  };
 
   return (
     <div className="home">
+      {/* Header với nền và lời chào */}
+      <header className="home-header">
+        <div className="header-content">
+          <h1 className="home-title">Photo Gallery</h1>
+          {token && user && (
+            <p className="welcome-message">
+              Chào mừng {user.username || user.email}!
+            </p>
+          )}
+          <div className="home-actions">
+            {!token ? (
+              <button
+                onClick={handleGoLogin}
+                className="login-button"
+                type="button"
+              >
+                Đăng Nhập
+              </button>
+            ) : (
+              <>
+                <button
+                  onClick={handleGoProfile}
+                  className="profile-button"
+                  type="button"
+                >
+                  Profile
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="logout-button"
+                  type="button"
+                >
+                  Đăng Xuất
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      </header>
+    
       <Routes>
         <Route
           path="/"
@@ -166,14 +185,3 @@ function Home() {
 }
 
 export default Home;
-
-// Hàm debounce để giới hạn số lần gọi hàm scroll
-function debounce(func, wait) {
-  let timeout;
-  return function (...args) {
-    // Xóa timeout trước đó
-    clearTimeout(timeout);
-    // Đặt timeout mới
-    timeout = setTimeout(() => func.apply(this, args), wait);
-  };
-}

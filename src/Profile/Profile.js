@@ -5,7 +5,7 @@ import { AuthContext } from "../Context/AuthContext";
 import Notification from "../Notification/Notification";
 import { useNavigate } from "react-router-dom";
 import "./Profile.css"; // Import file CSS riêng
-import icon from '../assets/iconDefault.png'; // Import icon mặc định
+import icon from "../assets/iconDefault.png"; // Import icon mặc định
 
 const Profile = () => {
   const { token, logout } = useContext(AuthContext); // Lấy token và logout từ AuthContext
@@ -54,7 +54,11 @@ const Profile = () => {
 
   const handleLogout = () => {
     logout();
-    navigate("/login");
+    navigate("/home");
+  };
+
+  const handleGoHome = () => {
+    navigate("/home"); // Điều hướng đến trang Home
   };
 
   if (loading) {
@@ -115,7 +119,10 @@ const Profile = () => {
           </div>
         </div>
 
-        <div className="profile-logout">
+        <div className="profile-actions">
+          <button onClick={handleGoHome} className="home-button">
+            Home
+          </button>
           <button onClick={handleLogout} className="logout-button">
             Đăng Xuất
           </button>
