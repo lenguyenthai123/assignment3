@@ -16,7 +16,7 @@ function Login() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({ mode: "onChange" });
   const { login } = useContext(AuthContext);
   const [loading, setLoading] = useState(false); // Thêm trạng thái loading
   const [notification, setNotification] = useState(null); // Thêm trạng thái thông báo

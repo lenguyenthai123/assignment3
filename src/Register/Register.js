@@ -11,7 +11,7 @@ const Register = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({ mode: "onChange" });
   const [notification, setNotification] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
